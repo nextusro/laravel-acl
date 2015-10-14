@@ -1,4 +1,4 @@
-<?php namespace Kodeine\Acl\Helper;
+<?php namespace Nextus\Acl\Helper;
 
 use Illuminate\Support\Collection;
 
@@ -32,18 +32,20 @@ trait Helper
     |----------------------------------------------------------------------
     |
     */
-
+    // TODO: obsoleted method
     protected function toDotPermissions(array $permissions)
     {
         $data = [];
         //$permissions = $this->permissions->lists('slug', 'name');
-        foreach ($permissions as $alias => $perm) {
+        foreach ($permissions as $alias => $resource_data) {
+            foreach($resource_data as $resource_id => $perm){
             if ( ! is_array($perm) ) continue;
             foreach ($perm as $key => $value) {
                 //if ( (bool) $value == false ) continue;
                 $slug = $key . '.' . $alias;
                 $data[$slug] = $value;
                 //$data[] = $slug;
+            }
             }
         }
 

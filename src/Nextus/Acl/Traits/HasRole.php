@@ -1,4 +1,4 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php namespace Nextus\Acl\Traits;
 
 
 trait HasRole
@@ -19,7 +19,7 @@ trait HasRole
      */
     public function roles()
     {
-        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+        $model = config('acl.role', 'Nextus\Acl\Models\Eloquent\Role');
 
         return $this->belongsToMany($model)->withTimestamps();
     }
@@ -199,7 +199,7 @@ trait HasRole
     {
         if ( is_string($role) || is_numeric($role) ) {
 
-            $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+            $model = config('acl.role', 'Nextus\Acl\Models\Eloquent\Role');
             $key = is_numeric($role) ? 'id' : 'slug';
             $alias = (new $model)->where($key, $role)->first();
 

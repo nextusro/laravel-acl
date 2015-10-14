@@ -1,4 +1,4 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php namespace Nextus\Acl\Traits;
 
 use Illuminate\Support\Collection;
 
@@ -12,25 +12,38 @@ trait HasUserPermission
     |
     */
 
-    public function addPermission($name, $permission = true)
+    public function addPermission($name, $permission = true, $resource_id = 0)
     {
+        // filter by resource id
+        foreach($this->permissions as $k=>$row)
+        {
+            if($row->resource_id != $resource_id)
+                $this->permissions->forget($k);
+        }
+
         $slugs = $this->permissions->keyBy('name');
+
         list($slug, $name) = $this->extractAlias($name);
 
         if ( $slugs->has($name) && is_null($slug) && ! is_array($permission) ) {
             return true;
         }
 
+        /*
         if ( ! $slugs->has($name) && is_null($slug) ) {
-            return $this->addPermissionCrud($name);
+            return $this->addPermissionCrud($name, $resource_id);
         }
+        */
 
         $slug = is_array($permission)
             ? $permission : [$slug => (bool) $permission];
 
+        if(is_null($resource_id))
+            $resource_id = 0;
+
         // if alias doesn't exist, create permission
         if ( ! $slugs->has($name) ) {
-            $new = $this->permissions()->create(compact('name', 'slug'));
+            $new = $this->permissions()->create(compact('name', 'slug', 'resource_id'));
             $this->permissions->push($new);
 
             return $new;
@@ -68,7 +81,7 @@ trait HasUserPermission
     |
     */
 
-    protected function addPermissionCrud($name)
+    protected function addPermissionCrud($name, $resource_id = 0)
     {
         $slugs = $this->permissions->keyBy('name');
         list(, $name) = $this->extractAlias($name);
@@ -88,7 +101,7 @@ trait HasUserPermission
 
         // if alias doesn't exist, create crud permissions
         if ( ! $slugs->has($name) ) {
-            $new = $this->permissions()->create(compact('name', 'slug'));
+            $new = $this->permissions()->create(compact('name', 'slug', 'resource_id'));
             $this->permissions->push($new);
 
             return $new;

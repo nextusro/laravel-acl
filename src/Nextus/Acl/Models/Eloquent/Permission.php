@@ -1,4 +1,4 @@
-<?php namespace Kodeine\Acl\Models\Eloquent;
+<?php namespace Nextus\Acl\Models\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +9,7 @@ class Permission extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'slug', 'description', 'inherit_id'];
+    protected $fillable = ['name', 'slug', 'description', 'resource_id'];
 
     /**
      * The database table used by the model.
@@ -25,7 +25,7 @@ class Permission extends Model
      */
     public function roles()
     {
-        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+        $model = config('acl.role', 'Nextus\Acl\Models\Eloquent\Role');
 
         return $this->belongsToMany($model)->withTimestamps();
     }

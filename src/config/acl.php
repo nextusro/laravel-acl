@@ -8,8 +8,8 @@ return [
      * to package's model. You can define your model here.
      */
 
-    'role'       => 'Kodeine\Acl\Models\Eloquent\Role',
-    'permission' => 'Kodeine\Acl\Models\Eloquent\Permission',
+    'role'       => 'Nextus\Acl\Models\Eloquent\Role',
+    'permission' => 'Nextus\Acl\Models\Eloquent\Permission',
 
     /**
      * NTFS right, the more permissive wins

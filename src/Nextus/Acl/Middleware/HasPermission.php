@@ -1,4 +1,4 @@
-<?php namespace Kodeine\Acl\Middleware;
+<?php namespace Nextus\Acl\Middleware;
 
 use Closure;
 
@@ -49,6 +49,7 @@ class HasPermission
             return $next($request);
         }
 
+        /*
         if ( $request->isJson() || $request->wantsJson() ) {
             return response()->json([
                 'error' => [
@@ -58,6 +59,7 @@ class HasPermission
                 ],
             ], 401);
         }
+        */
 
         return abort(401, 'You are not authorized to access this resource.');
     }
@@ -85,7 +87,11 @@ class HasPermission
         $request = $this->request;
         $do = $this->getAction('can');
 
-        return ! $this->forbiddenRoute() && $request->user()->can($do);
+        $id = $this->request->route()->getParameter('id');
+        if(is_null($id))
+            $id = 0;
+
+        return ! $this->forbiddenRoute() && $request->user()->can($do, null, $id);
     }
 
     /**

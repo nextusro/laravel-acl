@@ -1,4 +1,4 @@
-<?php namespace Kodeine\Acl;
+<?php namespace Nextus\Acl;
 
 use Illuminate\Support\ServiceProvider;
 

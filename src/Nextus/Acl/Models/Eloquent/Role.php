@@ -1,7 +1,7 @@
-<?php namespace Kodeine\Acl\Models\Eloquent;
+<?php namespace Nextus\Acl\Models\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
-use Kodeine\Acl\Traits\HasPermission;
+use Nextus\Acl\Traits\HasPermission;
 
 class Role extends Model
 {
@@ -38,7 +38,7 @@ class Role extends Model
      */
     public function getPermissions()
     {
-        return $this->getPermissionsInherited();
+        return $this->buildPermissions();
     }
 
     /**
@@ -49,7 +49,7 @@ class Role extends Model
      * @param array  $mergePermissions
      * @return bool
      */
-    public function can($permission, $operator = null, $mergePermissions = [])
+    public function can($permission, $operator = null, $mergePermissions = [], $resource_id)
     {
         $operator = is_null($operator) ? $this->parseOperator($permission) : $operator;
 
@@ -58,7 +58,7 @@ class Role extends Model
 
         // make permissions to dot notation.
         // create.user, delete.admin etc.
-        $permissions = $this->toDotPermissions($permissions);
+        //$permissions = $this->toDotPermissions($permissions);
 
         // validate permissions array
         if ( is_array($permission) ) {
@@ -73,8 +73,12 @@ class Role extends Model
             return $this->$call($permission, $permissions);
         }
 
-        // validate single permission
-        return isset($permissions[$permission]) && $permissions[$permission] == true;
+        // SEEMEk: if the dot is not present ??
+        $pos = strrpos($permission, '.');
+        $name = substr($permission, $pos +1);
+        $key = substr($permission, 0, $pos);
+        
+        return isset($permissions[$name][$resource_id][$key]) && $permissions[$name][$resource_id][$key] == true;
     }
 
     /**

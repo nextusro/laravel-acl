@@ -1,10 +1,10 @@
-<?php namespace Kodeine\Acl\Traits;
+<?php namespace Nextus\Acl\Traits;
 
-use Kodeine\Acl\Helper\Helper;
+use Nextus\Acl\Helper\Helper;
 
 trait HasPermission
 {
-    use HasUserPermission, HasPermissionInheritance, Helper;
+    use HasUserPermission, Helper;
 
     /*
     |----------------------------------------------------------------------
@@ -20,9 +20,29 @@ trait HasPermission
      */
     public function permissions()
     {
-        $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
+        $model = config('acl.permission', 'Nextus\Acl\Models\Eloquent\Permission');
 
         return $this->belongsToMany($model)->withTimestamps();
+    }
+
+
+    /**
+     * This method is partial method from HasPermissionInheritance
+     *
+     * @return array
+     */
+    public function buildPermissions()
+    {
+        $permissions = array();
+
+        $tmp = [];
+        foreach ($this->permissions as $row)
+        {
+            $permissions = array_replace_recursive($permissions,
+                [$row->name => array($row->resource_id => $row->slug)], $tmp);
+        }
+
+        return $permissions;
     }
 
     /**
@@ -33,8 +53,7 @@ trait HasPermission
      */
     public function getPermissions()
     {
-        // user permissions overridden from role.
-        $permissions = $this->getPermissionsInherited();
+        $permissions = $this->buildPermissions();
 
         // permissions based on role.
         // more permissive permission wins
@@ -62,7 +81,7 @@ trait HasPermission
      * @param  string $operator
      * @return bool
      */
-    public function can($permission, $operator = null)
+    public function can($permission, $operator = null, $resource_id = 0)
     {
         // user permissions including
         // all of user role permissions
@@ -71,9 +90,9 @@ trait HasPermission
         // lets call our base can() method
         // from role class. $merge already
         // has user & role permissions
-        $model = config('acl.role', 'Kodeine\Acl\Models\Eloquent\Role');
+        $model = config('acl.role', 'Nextus\Acl\Models\Eloquent\Role');
 
-        return (new $model)->can($permission, $operator, $merge);
+        return (new $model)->can($permission, $operator, $merge, $resource_id);
     }
 
     /**
@@ -161,7 +180,7 @@ trait HasPermission
     {
         if ( is_string($permission) || is_numeric($permission) ) {
 
-            $model = config('acl.permission', 'Kodeine\Acl\Models\Eloquent\Permission');
+            $model = config('acl.permission', 'Nextus\Acl\Models\Eloquent\Permission');
             $key = is_numeric($permission) ? 'id' : 'name';
             $alias = (new $model)->where($key, $permission)->first();
 
