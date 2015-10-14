@@ -1,5 +1,7 @@
 
-# Kodeine/Laravel-ACL
+# Nextusro/Laravel-ACL
+
+This package is a fork from kodeine/laravel-acl and has big changes. Please, use only if you know what/how to do.
 
 [![Laravel](https://img.shields.io/badge/Laravel-~5.0-orange.svg?style=flat-square)](http://laravel.com)
 [![Source](http://img.shields.io/badge/source-kodeine/laravel--acl-blue.svg?style=flat-square)](https://github.com/kodeine/laravel-acl/)
@@ -29,7 +31,7 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 ```
 "require": {
 ...
-"kodeine/laravel-acl": "~1.0@dev",
+"nextusro/laravel-acl": "~1.0@dev",
 ...
 },
 ```
@@ -42,7 +44,7 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 'Illuminate\Auth\AuthServiceProvider',
 ...
-'Kodeine\Acl\AclServiceProvider',
+'Nextusro\Acl\AclServiceProvider',
 
 ],
 ```
@@ -50,7 +52,7 @@ Laravel ACL adds role based permissions to built in Auth System of Laravel 5. AC
 3. Publish the package migrations to your application and run these with `php artisan migrate.
 
 ```
-$ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
+$ php artisan vendor:publish --provider="Nextusro\Acl\AclServiceProvider"
 ```
 
 > **Use your own models.**
@@ -62,7 +64,7 @@ $ php artisan vendor:publish --provider="Kodeine\Acl\AclServiceProvider"
 protected $routeMiddleware = [
 
 ....
-'acl' => 'Kodeine\Acl\Middleware\HasPermission',
+'acl' => 'Nextusro\Acl\Middleware\HasPermission',
 
 ];
 ```
@@ -70,7 +72,7 @@ protected $routeMiddleware = [
 5. Add the HasRole trait to your `User` model.
 
 ```php
-use Kodeine\Acl\Traits\HasRole;
+use Nextusro\Acl\Traits\HasRole;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
