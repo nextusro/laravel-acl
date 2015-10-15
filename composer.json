@@ -18,7 +18,7 @@
         "classmap": [
         ],
         "psr-0": {
-            "Kodeine\\Acl\\": "src/"
+            "Nextus\\Acl\\": "src/"
         }
     },
     "minimum-stability": "stable",
